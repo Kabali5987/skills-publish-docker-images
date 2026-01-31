@@ -12,15 +12,27 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Print completion message (checkout)
+        run: echo "Checkout completed"
+
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Print completion message (login)
+        run: echo "✔️ Step 2:Login to GHCR completed"
+
       - name: Build and push Docker image
         run: |
+          echo "🔨 Building Docker image..."
           docker build . --tag ghcr.io/kabali5987/skills-publish-docker-images/stackoverflown:main
+          echo "📤 Pushing image to GHCR..."
           docker push ghcr.io/kabali5987/skills-publish-docker-images/stackoverflown:main
+      - name: Print completion message (build + push)
+        run: echo "✔️ Step 3:Docker build and push completed successfully"
